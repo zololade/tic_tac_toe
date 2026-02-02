@@ -16,8 +16,10 @@ winning array(cross) = [0,4,8],[2,4,6]
 */
 
 export default function GameInstance() {
- let gameBoard: number[] = [];
+ // Creates: [null, null, null, null, null, null, null, null, null]
+ let gameBoard: (number | null)[] = Array(9).fill(null);
 
+ //decleare win conditions
  const WinCondition = [
   "0,1,2",
   "3,4,5",
@@ -29,27 +31,44 @@ export default function GameInstance() {
   "2,4,6",
  ];
 
+ // const playerOneID = "x";
+ // const playerTwoID = "o";
+
+ //get game board
+ const getGameBoard = () => {
+  return gameBoard;
+ };
+
  //GR:gameRecord
  const playerOneGR: string[] = [];
  const playerTwoGR: string[] = [];
 
  //populate board
  const populateBoard = (data: string) => {
-  const insertAt = (array: number[], index: number, newData: number) => [
-   ...array.slice(0, index),
-   newData,
-   ...array.slice(index),
-  ];
+  const insertAt = (
+   array: (number | null)[],
+   index: number,
+   newData: number,
+  ) => {
+   if (array[index] === null) {
+    return [...array.slice(0, index), newData, ...array.slice(index)];
+   } else if (array[index] === newData) {
+    throw new Error("Number already exists");
+   } else {
+    throw new Error("something went wrong");
+   }
+  };
+
   gameBoard = insertAt(gameBoard, +data, +data);
  };
 
  // record player position
- function recPlayerPos(playerId: number, data: string) {
+ function recPlayerPos(playerId: string, data: string) {
   populateBoard(data);
 
-  if (playerId === 1) {
+  if (playerId === "x") {
    playerOneGR.push(data);
-  } else if (playerId === 2) {
+  } else if (playerId === "o") {
    playerTwoGR.push(data);
   }
  }
@@ -70,24 +89,36 @@ export default function GameInstance() {
     break;
    }
   }
-  return outcome ? outcome : "lost";
+  return outcome ? outcome : "proceed to next round";
  }
 
  return {
-  gameBoard,
+  // playerOneID,
+  // playerTwoID,
+  getGameBoard,
   recPlayerPos,
   confirmWin,
+  playerOneGR,
  };
 }
 
-function sampleGamePlay() {
+function sampleGamePlay(playerId: "x" | "o") {
  let game = GameInstance();
- let playerOne = ["0", "3", "8", "7"];
- // let playerTwo = ["1", "4", "5", "6", "2"];
 
- playerOne.forEach((item) => {
-  game.recPlayerPos(1, item);
+ let playerOne = ["0", "3", "8", "7"];
+ let playerTwo = ["1", "4", "5", "6", "2", "2"];
+
+ playerTwo.forEach((item) => {
+  game.recPlayerPos(playerId, item);
  });
+
+ if (playerId === "x") {
+  console.log(game.confirmWin(playerOne));
+ } else if (playerId === "o") {
+  console.log(game.confirmWin(playerTwo));
+ }
+
+ console.log(game.getGameBoard());
 }
 
-sampleGamePlay();
+sampleGamePlay("o");
