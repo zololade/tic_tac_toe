@@ -19,7 +19,12 @@ export default function GameInstance() {
 
  //get game board
  const getGameBoard = () => {
-  return gameBoard;
+  return gameBoard.map((value) => value);
+ };
+
+ //get game gameState
+ const getGameState = () => {
+  return gameState;
  };
 
  //GR:gameRecord
@@ -73,5 +78,6 @@ export default function GameInstance() {
  return {
   getGameBoard,
   recPlayerPos,
+  getGameState,
  };
 }

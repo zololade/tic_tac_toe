@@ -1,2 +1,2 @@
 import "./css/style.css";
-import "./ts/Game.ts";
+import "./ts/game/Game.ts";
