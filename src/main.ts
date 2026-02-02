@@ -1,2 +1,6 @@
 import "./css/style.css";
-import "./ts/game/Game.ts";
+import GameRunner from "./ts/game/GameRunner";
+
+const game = GameRunner();
+
+game.startGame();
