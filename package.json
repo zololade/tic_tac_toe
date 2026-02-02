@@ -1,15 +1,16 @@
 {
-  "name": "tic_tac_toe",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "typescript": "~5.9.3",
-    "vite": "^7.2.4"
-  }
+ "name": "tic_tac_toe",
+ "private": true,
+ "version": "0.0.0",
+ "type": "module",
+ "scripts": {
+  "dev": "vite",
+  "build": "tsc && vite build",
+  "preview": "vite preview",
+  "debug": "tsx ./src/ts/Game.ts"
+ },
+ "devDependencies": {
+  "typescript": "~5.9.3",
+  "vite": "^7.2.4"
+ }
 }

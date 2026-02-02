@@ -16,7 +16,7 @@ winning array(cross) = [0,4,8],[2,4,6]
 */
 
 export default function GameInstance() {
- const gameBoard: number[] = [];
+ let gameBoard: number[] = [];
 
  const WinCondition = [
   "0,1,2",
@@ -29,14 +29,32 @@ export default function GameInstance() {
   "2,4,6",
  ];
 
- //startgame
- const playerOneAvatar = "x";
- const playerTwoAvatar = "o";
-
  //GR:gameRecord
  const playerOneGR: string[] = [];
  const playerTwoGR: string[] = [];
 
+ //populate board
+ const populateBoard = (data: string) => {
+  const insertAt = (array: number[], index: number, newData: number) => [
+   ...array.slice(0, index),
+   newData,
+   ...array.slice(index),
+  ];
+  gameBoard = insertAt(gameBoard, +data, +data);
+ };
+
+ // record player position
+ function recPlayerPos(playerId: number, data: string) {
+  populateBoard(data);
+
+  if (playerId === 1) {
+   playerOneGR.push(data);
+  } else if (playerId === 2) {
+   playerTwoGR.push(data);
+  }
+ }
+
+ //confirmWin
  function confirmWin(playerInputs: string[]) {
   let outcome: string = "";
 
@@ -55,20 +73,21 @@ export default function GameInstance() {
   return outcome ? outcome : "lost";
  }
 
- function getGameboard() {}
- function setGameboard() {}
-
- //newgame
- const newGame = () => {};
- //restart game
- const restartGame = () => {};
- //score board
- // record score
  return {
-  playerOneGR,
-  playerTwoGR,
-  newGame,
-  restartGame,
   gameBoard,
+  recPlayerPos,
+  confirmWin,
  };
 }
+
+function sampleGamePlay() {
+ let game = GameInstance();
+ let playerOne = ["0", "3", "8", "7"];
+ // let playerTwo = ["1", "4", "5", "6", "2"];
+
+ playerOne.forEach((item) => {
+  game.recPlayerPos(1, item);
+ });
+}
+
+sampleGamePlay();
