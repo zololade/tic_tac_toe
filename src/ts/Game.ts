@@ -1,20 +1,3 @@
-/*
-The gmae board should be a multidimensional array of three, and houses the following characters
-
-top row =[Tl,Tm,Tr]
-mid row =[Ml,Mm,Mr]
-last row =[Ll,Lm,Lr]
-
-winning value is
-the above set up, and [Tl,Ml,Ll],[Tm,Mm,Lm],[Tr,Mr,Lr],[Tl,Mm,Lr],[Tr,Mm,Ll]
-
-game array[null,null,null,null,null,null,null,null,null]
-
-winning array(horizontal) = [0,1,2],[3,4,5],[6,7,8]
-winning array(vertical) = [0,3,6],[1,4,7],[2,5,8]
-winning array(cross) = [0,4,8],[2,4,6]
-*/
-
 type Cell = number | null;
 
 export default function GameInstance() {
@@ -92,17 +75,3 @@ export default function GameInstance() {
   recPlayerPos,
  };
 }
-
-function sampleGamePlay(playerId: "x" | "o") {
- let game = GameInstance();
-
- let playerTwo = [1, 4, 5, 6, 2];
-
- playerTwo.forEach((item) => {
-  game.recPlayerPos(playerId, item);
- });
-
- console.log(game.getGameBoard().toString());
-}
-
-sampleGamePlay("o");
