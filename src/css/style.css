@@ -5,7 +5,7 @@
 
  color-scheme: light dark;
  color: rgba(255, 255, 255, 0.87);
- background-color: #242424;
+ background-color: #192a32;
 
  font-synthesis: none;
  text-rendering: optimizeLegibility;
@@ -72,4 +72,19 @@ button:focus-visible {
  button {
   background-color: #f9f9f9;
  }
+}
+.x-color {
+ color: #32c3c0;
+}
+.o-color {
+ color: #f1b135;
+}
+.x-bg {
+ background-color: #32c3c0;
+}
+.o-bg {
+ background-color: #f1b135;
+}
+.ties-bg {
+ background-color: #a7bec8;
 }

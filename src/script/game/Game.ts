@@ -1,8 +1,12 @@
-type Cell = number | null;
+// type Cell = number | null;
+type Move = {
+ playerId: string;
+ index: number;
+};
 
 export default function GameInstance() {
  // Creates: [null, null, null, null, null, null, null, null, null]
- let gameBoard: Cell[] = Array(9).fill(null);
+ let gameBoard: (Move | null)[] = Array(9).fill(null);
  let gameState: "continue" | "wins" | "draw" = "continue";
 
  //decleare win conditions
@@ -27,32 +31,29 @@ export default function GameInstance() {
   return gameState;
  };
 
- //GR:gameRecord
- const playerOneGR: number[] = [];
- const playerTwoGR: number[] = [];
+ //get player input
+ const getPlayerInputs = (playerId: string) => {
+  return gameBoard
+   .filter((m): m is Move => m !== null && m.playerId === playerId)
+   .map((m) => m.index);
+ };
 
  //populate board
-
- const populateBoard = (index: number) => {
-  if (gameBoard[index] !== null) {
+ const populateBoard = (move: Move) => {
+  if (gameBoard[move.index] !== null) {
    throw new Error("Cell already occupied");
   }
 
-  gameBoard = gameBoard.map((v, i) => (i === index ? index : v));
+  gameBoard = gameBoard.map((v, i) => (i === move.index ? move : v));
  };
 
  // record player position
- function recPlayerPos(playerId: string, data: number) {
+ function recPlayerPos(playerId: string, index: number) {
   if (gameState === "wins" || gameState === "draw") return;
-  populateBoard(data);
+  populateBoard({ playerId, index });
 
-  if (playerId === "x") {
-   playerOneGR.push(data);
-   gameState = confirmWin(playerOneGR);
-  } else if (playerId === "o") {
-   playerTwoGR.push(data);
-   gameState = confirmWin(playerTwoGR);
-  }
+  const playerInputs = getPlayerInputs(playerId);
+  gameState = confirmWin(playerInputs);
  }
 
  //confirmWin

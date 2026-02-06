@@ -1,0 +1,29 @@
+.scoreBoard {
+ display: flex;
+ gap: 1rem;
+ margin-top: 1rem;
+ justify-content: space-between;
+}
+
+/*some sort of reset*/
+.scoreBoard p {
+ margin: 0px;
+}
+.scoreBoard div {
+ padding: 0.15rem 0rem;
+ border-radius: 0.5rem;
+ flex-basis: auto;
+ flex-grow: 1;
+ flex-basis: 0;
+}
+.scoreBoard-text,
+.scoreBoard-text + p {
+ color: #062329;
+ font-weight: bold;
+}
+.scoreBoard-text {
+ font-size: 0.75rem;
+}
+.scoreBoard-text + p {
+ font-size: 1.15rem;
+}

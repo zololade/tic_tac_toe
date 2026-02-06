@@ -1,0 +1,16 @@
+.board {
+ min-width: 18rem;
+ display: grid;
+ grid-template-columns: 1fr 1fr 1fr;
+ gap: 1rem;
+}
+
+.board > * {
+ box-shadow: 0 0.4rem 0.3rem 0.1rem #0e1f29;
+ border-radius: 0.5rem;
+ background-color: #1f3540;
+ display: flex;
+ height: 5rem;
+ width: 5rem;
+ place-items: center;
+}

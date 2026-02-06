@@ -1,0 +1,48 @@
+.header {
+ display: flex;
+ align-items: center;
+ flex-direction: row;
+ justify-content: space-between;
+ margin-bottom: 0.75rem;
+}
+.retry {
+ padding: 0.5rem;
+ background-color: #a8bec9;
+ display: flex;
+ box-shadow: 0 0.2rem 0rem 0rem #6d8893;
+ place-items: center;
+}
+.retry svg {
+ margin: auto;
+ height: 0.85rem;
+ fill: #122833;
+}
+
+/*logo*/
+.logo {
+ display: flex;
+ place-items: center;
+}
+.logo .o,
+.logo .x {
+ display: flex;
+ place-items: center;
+ width: 1.5rem;
+}
+.logo .o svg,
+.logo .x svg {
+ height: auto;
+}
+/*turn*/
+.turn {
+ background-color: #1f3540;
+ display: flex;
+ place-items: center;
+ padding: 0.3rem 0.75rem;
+ border-radius: 0.5rem;
+ box-shadow: 0 0.2rem 0rem 0rem #12232d;
+}
+.turn p {
+ text-align: center;
+ margin: auto;
+}
