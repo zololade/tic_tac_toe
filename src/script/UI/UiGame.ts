@@ -4,7 +4,7 @@ import { ICON_X, ICON_O } from "./Icons";
 export function gameStart() {
  let game = GameInstance();
 
- let playerId = "x";
+ let playerId: "x" | "o" = "x";
  let cell = document.querySelectorAll(".cell");
  let turn = document.querySelector(".turnCharacter");
  let resetButton = document.querySelector(".retry");
@@ -34,7 +34,8 @@ export function gameStart() {
 
     //turn color and icon
     if (turn) turn.innerHTML = playerId === "x" ? ICON_O : ICON_X;
-    turnParent.className = `turn ${playerId === "x" ? "o" : "x"}-color`;
+    turnParent.classList.remove("x-color", "o-color");
+    turnParent.classList.add(`${playerId === "x" ? "o" : "x"}-color`);
 
     // alert win
     setTimeout(() => {
@@ -49,11 +50,11 @@ export function gameStart() {
   });
  });
 
- resetButton?.addEventListener("click", () => {
+ function resetLogic() {
   let value = ".scoreBoard-value";
-  let recordTie = tieBoard.querySelector(value);
-  let recordX = boardX.querySelector(value);
-  let recordO = boardO.querySelector(value);
+  const recordTie = tieBoard?.querySelector<HTMLElement>(value);
+  const recordX = boardX?.querySelector<HTMLElement>(value);
+  const recordO = boardO?.querySelector<HTMLElement>(value);
   if (recordTie) recordTie.textContent = game.scoreBoard.tie.toString();
   if (recordX) recordX.textContent = game.scoreBoard.x.toString();
   if (recordO) recordO.textContent = game.scoreBoard.o.toString();
@@ -72,7 +73,8 @@ export function gameStart() {
   turnParent.classList.add("x-color");
 
   playerId = "x";
- });
+ }
+ resetButton?.addEventListener("click", resetLogic);
 }
 
 gameStart();

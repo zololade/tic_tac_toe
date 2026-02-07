@@ -46,7 +46,7 @@ export default function GameInstance() {
  };
 
  //get player input
- const getPlayerInputs = (playerId: string) => {
+ const getPlayerInputs = (playerId: PlayerId) => {
   return gameBoard
    .filter((m): m is Move => m !== null && m.playerId === playerId)
    .map((m) => m.index);
@@ -69,11 +69,8 @@ export default function GameInstance() {
   const playerInputs = getPlayerInputs(playerId);
   gameState = confirmWin(playerInputs);
 
-  if (gameState === "draw") {
-   scoreBoard["tie"] += 1;
-  } else if (gameState === "wins") {
-   scoreBoard[playerId] += 1;
-  }
+  if (gameState === "draw") scoreBoard["tie"] += 1;
+  if (gameState === "wins") scoreBoard[playerId] += 1;
  }
 
  //confirmWin
