@@ -32,6 +32,26 @@ function renderWinningCells(positions: number[], winner: "x" | "o") {
   });
 }
 
+//renderDialog
+function renderDialog(
+ winner: Element | null,
+ player: "x" | "o",
+ dialog: HTMLDialogElement,
+) {
+ if (!winner) return;
+ winner.classList.add(`${player === "x" ? "x" : "o"}-color`);
+ winner.innerHTML = player === "x" ? ICON_X : ICON_O;
+ setTimeout(() => dialog.showModal(), 500);
+}
+
+//reset dialog
+function clearDialog(winner: Element | null, dialog: HTMLDialogElement) {
+ if (!winner) return;
+ winner.classList.remove(`o-color`, "x-color");
+ winner.innerHTML = "";
+ dialog.close();
+}
+
 //updateScoreBoard
 function updateScoreBoard(
  resultBoard: Element[],
@@ -76,12 +96,19 @@ export function gameStart() {
  let currentPlayer: Player = "x";
  let cells = document.querySelectorAll(".cell");
  let turn = document.querySelector(".turnCharacter");
+ let winnerLogo = document.querySelector(".winnerCharacter");
  let resetButton = document.querySelector(".retry");
  if (turn) turn.innerHTML = ICON_X;
  let turnParent = turn?.parentNode as HTMLElement;
  turnParent.classList.add("x-color");
  const scoreBoard = Array.from(document.querySelectorAll(".scoreBoard>*"));
+ let dialog = document.querySelector(".gameDialog") as HTMLDialogElement;
+ let continueButton = document.querySelector(
+  ".continue-button",
+ ) as HTMLButtonElement;
+ let quitButton = document.querySelector(".quit-button") as HTMLButtonElement;
 
+ //handle ui
  cells.forEach((currentCell) => {
   currentCell?.addEventListener("click", (e) => {
    //grabinput
@@ -104,13 +131,16 @@ export function gameStart() {
    if (game.getGameState() === "wins") {
     let positions = game.getWinningCombination();
     renderWinningCells(positions, currentPlayer);
+    renderDialog(winnerLogo, currentPlayer, dialog);
    }
    //update player
    currentPlayer = currentPlayer === "x" ? "o" : "x";
   });
  });
 
+ //handle rese and continue
  function resetLogic() {
+  clearDialog(winnerLogo, dialog);
   //updateScoreBoard
   updateScoreBoard(scoreBoard, game.scoreBoard);
   // resetBoard
@@ -122,7 +152,12 @@ export function gameStart() {
   //reset player
   currentPlayer = "x";
  }
+
  resetButton?.addEventListener("click", resetLogic);
+ continueButton.addEventListener("click", resetLogic);
+ quitButton.addEventListener("click", () => {
+  window.location.reload();
+ });
 }
 
 gameStart();
