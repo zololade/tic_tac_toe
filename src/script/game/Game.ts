@@ -59,12 +59,14 @@ export default function GameInstance() {
    .map((m) => m.index);
  };
 
+ //validate cell
+ const canPlay = (index: number) => {
+  return gameBoard[index] !== null ? false : true;
+ };
+
  //populate board
  const populateBoard = (move: Move) => {
-  if (gameBoard[move.index] !== null) {
-   throw new Error("Cell already occupied");
-  }
-
+  if (!canPlay(move.index)) return;
   gameBoard = gameBoard.map((v, i) => (i === move.index ? move : v));
  };
 
@@ -108,5 +110,6 @@ export default function GameInstance() {
   resetGameBoard,
   scoreBoard,
   getWinningCombination,
+  canPlay,
  };
 }

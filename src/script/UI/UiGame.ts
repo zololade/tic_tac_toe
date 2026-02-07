@@ -1,19 +1,86 @@
 import GameInstance from "../game/Game";
 import { ICON_X, ICON_O } from "./Icons";
 
+//helper functions
+// played cell
+function renderPlayedCell(cell: HTMLElement, playerId: "x" | "o") {
+ //update ui
+ cell.classList.add(`${playerId === "x" ? "x" : "o"}-color`);
+ cell.innerHTML = playerId === "x" ? ICON_X : ICON_O;
+}
+
+//renderTurnIndicator
+function renderTurnIndicator(
+ turn: Element | null,
+ turnParent: HTMLElement,
+ player: "x" | "o",
+) {
+ //turn color and icon
+ if (!turn) return;
+ turn.innerHTML = player === "x" ? ICON_X : ICON_O;
+ turnParent.classList.remove("x-color", "o-color");
+ turnParent.classList.add(`${player}-color`);
+}
+
+//winningCell
+function renderWinningCells(positions: number[], winner: "x" | "o") {
+ document
+  .querySelectorAll(positions.map((p) => `[data-cell-number="${p}"]`).join(","))
+  .forEach((cell) => {
+   cell.classList.remove("x-color", "o-color");
+   cell.classList.add("winningCell", `${winner.toUpperCase()}winningCell`);
+  });
+}
+
+//updateScoreBoard
+function updateScoreBoard(
+ resultBoard: Element[],
+ scoreBoard: Record<"x" | "o" | "tie", number>,
+) {
+ let [boardX, tieBoard, boardO] = resultBoard;
+ let value = ".scoreBoard-value";
+ const recordTie = tieBoard?.querySelector<HTMLElement>(value);
+ const recordX = boardX?.querySelector<HTMLElement>(value);
+ const recordO = boardO?.querySelector<HTMLElement>(value);
+ if (recordTie) recordTie.textContent = scoreBoard.tie.toString();
+ if (recordX) recordX.textContent = scoreBoard.x.toString();
+ if (recordO) recordO.textContent = scoreBoard.o.toString();
+}
+
+//reset board
+function resetBoardUI(cell: NodeListOf<Element>) {
+ cell.forEach((currentCell) => {
+  currentCell.classList.remove(
+   "o-color",
+   "x-color",
+   "winningCell",
+   "OwinningCell",
+   "XwinningCell",
+  );
+  currentCell.innerHTML = "";
+ });
+}
+
+//reset turn
+function resetTurnUI(turn: Element | null, turnParent: HTMLElement) {
+ if (!turn) return;
+ turn.innerHTML = ICON_X;
+ turnParent.classList.remove("o-color", `x-color`);
+ turnParent.classList.add("x-color");
+}
+
 export function gameStart() {
  let game = GameInstance();
 
- let playerId: "x" | "o" = "x";
+ type Player = "x" | "o";
+ let currentPlayer: Player = "x";
  let cell = document.querySelectorAll(".cell");
  let turn = document.querySelector(".turnCharacter");
  let resetButton = document.querySelector(".retry");
  if (turn) turn.innerHTML = ICON_X;
  let turnParent = turn?.parentNode as HTMLElement;
  turnParent.classList.add("x-color");
- const [boardX, tieBoard, boardO] = Array.from(
-  document.querySelectorAll(".scoreBoard>*"),
- );
+ const scoreBoard = Array.from(document.querySelectorAll(".scoreBoard>*"));
 
  cell.forEach((currentCell) => {
   currentCell?.addEventListener("click", (e) => {
@@ -23,74 +90,36 @@ export function gameStart() {
    let cellId = target.dataset.cellNumber;
 
    // validate
-   try {
-    if (game.getGameState() !== "continue") return;
-    // send input
-    if (cellId) game.recPlayerPos(playerId, +cellId);
-
-    //update ui
-    target.classList.add(`${playerId === "x" ? "x" : "o"}-color`);
-    target.innerHTML = playerId === "x" ? ICON_X : ICON_O;
-
-    //turn color and icon
-    if (turn) turn.innerHTML = playerId === "x" ? ICON_O : ICON_X;
-    turnParent.classList.remove("x-color", "o-color");
-    turnParent.classList.add(`${playerId === "x" ? "o" : "x"}-color`);
-
-    // alert win
-    if (game.getGameState() === "wins") {
-     let [a, b, c] = game.getWinningCombination();
-     document
-      .querySelectorAll(
-       `[data-cell-number="${a}"],[data-cell-number="${b}"],[data-cell-number="${c}"]`,
-      )
-      .forEach((cell) => {
-       cell.classList.remove("x-color", "o-color");
-       cell.classList.add(
-        `winningCell`,
-        `${playerId === "x" ? "X" : "O"}winningCell`,
-       );
-      });
-    }
-
-    playerId = playerId === "x" ? "o" : "x";
-   } catch (err) {
-    if (err) {
-     console.log("cell occupied");
-    }
+   if (cellId && !game.canPlay(+cellId)) return;
+   if (game.getGameState() !== "continue") return;
+   // send input
+   if (cellId) game.recPlayerPos(currentPlayer, +cellId);
+   //update ui
+   renderPlayedCell(target, currentPlayer);
+   //turn color and icon
+   const nextPlayer = currentPlayer === "x" ? "o" : "x";
+   renderTurnIndicator(turn, turnParent, nextPlayer);
+   // display winnner
+   if (game.getGameState() === "wins") {
+    let positions = game.getWinningCombination();
+    renderWinningCells(positions, currentPlayer);
    }
+   //update player
+   currentPlayer = currentPlayer === "x" ? "o" : "x";
   });
  });
 
  function resetLogic() {
-  let value = ".scoreBoard-value";
-  const recordTie = tieBoard?.querySelector<HTMLElement>(value);
-  const recordX = boardX?.querySelector<HTMLElement>(value);
-  const recordO = boardO?.querySelector<HTMLElement>(value);
-  if (recordTie) recordTie.textContent = game.scoreBoard.tie.toString();
-  if (recordX) recordX.textContent = game.scoreBoard.x.toString();
-  if (recordO) recordO.textContent = game.scoreBoard.o.toString();
-
+  //updateScoreBoard
+  updateScoreBoard(scoreBoard, game.scoreBoard);
+  // resetBoard
   game.resetGameBoard();
-
   //update ui
-  cell.forEach((currentCell) => {
-   currentCell.classList.remove(
-    "o-color",
-    "x-color",
-    "winningCell",
-    "OwinningCell",
-    "XwinningCell",
-   );
-   currentCell.innerHTML = "";
-  });
-
-  //turn color and icon
-  if (turn) turn.innerHTML = ICON_X;
-  turnParent.classList.remove("o-color", `x-color`);
-  turnParent.classList.add("x-color");
-
-  playerId = "x";
+  resetBoardUI(cell);
+  // reset turn color and icon
+  resetTurnUI(turn, turnParent);
+  //reset player
+  currentPlayer = "x";
  }
  resetButton?.addEventListener("click", resetLogic);
 }
