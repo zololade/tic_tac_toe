@@ -6,15 +6,15 @@
  margin-bottom: 0.75rem;
 }
 .retry {
- padding: 0.5rem;
+ padding: 0.25rem;
  background-color: #a8bec9;
  display: flex;
  box-shadow: 0 0.2rem 0rem 0rem #6d8893;
  place-items: center;
+ height: 1.75rem;
 }
 .retry svg {
  margin: auto;
- height: 0.85rem;
  fill: #122833;
 }
 
@@ -29,10 +29,7 @@
  place-items: center;
  width: 1.5rem;
 }
-.logo .o svg,
-.logo .x svg {
- height: auto;
-}
+
 /*turn*/
 .turn {
  background-color: #1f3540;
@@ -45,4 +42,8 @@
 .turn p {
  text-align: center;
  margin: auto;
+}
+.turnCharacter {
+ height: 1rem;
+ width: 1rem;
 }

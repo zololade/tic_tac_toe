@@ -1,6 +1,8 @@
-// type Cell = number | null;
+// type Cell = number | null
+type PlayerId = "x" | "o";
+
 type Move = {
- playerId: string;
+ playerId: PlayerId;
  index: number;
 };
 
@@ -20,6 +22,18 @@ export default function GameInstance() {
   [0, 4, 8],
   [2, 4, 6],
  ];
+
+ const scoreBoard: Record<"x" | "o" | "tie", number> = {
+  x: 0,
+  tie: 0,
+  o: 0,
+ };
+
+ //reset board
+ const resetGameBoard = () => {
+  gameBoard = Array(9).fill(null);
+  gameState = "continue";
+ };
 
  //get game board
  const getGameBoard = () => {
@@ -48,12 +62,18 @@ export default function GameInstance() {
  };
 
  // record player position
- function recPlayerPos(playerId: string, index: number) {
+ function recPlayerPos(playerId: PlayerId, index: number) {
   if (gameState === "wins" || gameState === "draw") return;
   populateBoard({ playerId, index });
 
   const playerInputs = getPlayerInputs(playerId);
   gameState = confirmWin(playerInputs);
+
+  if (gameState === "draw") {
+   scoreBoard["tie"] += 1;
+  } else if (gameState === "wins") {
+   scoreBoard[playerId] += 1;
+  }
  }
 
  //confirmWin
@@ -80,5 +100,7 @@ export default function GameInstance() {
   getGameBoard,
   recPlayerPos,
   getGameState,
+  resetGameBoard,
+  scoreBoard,
  };
 }
