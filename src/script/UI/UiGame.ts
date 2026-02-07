@@ -38,9 +38,10 @@ export function gameStart() {
     turnParent.classList.add(`${playerId === "x" ? "o" : "x"}-color`);
 
     // alert win
-    setTimeout(() => {
-     if (game.getGameState() === "wins") alert("we have a winner");
-    }, 5);
+    if (game.getGameState() === "wins") {
+     alert("we have a winner");
+    }
+
     playerId = playerId === "x" ? "o" : "x";
    } catch (err) {
     if (err) {

@@ -23,6 +23,8 @@ export default function GameInstance() {
   [2, 4, 6],
  ];
 
+ let winningCombination: number[] = [];
+
  const scoreBoard: Record<"x" | "o" | "tie", number> = {
   x: 0,
   tie: 0,
@@ -38,6 +40,11 @@ export default function GameInstance() {
  //get game board
  const getGameBoard = () => {
   return gameBoard.map((value) => value);
+ };
+
+ //get game winner cell
+ const getWinningCombination = () => {
+  return winningCombination.map((value) => value);
  };
 
  //get game gameState
@@ -83,6 +90,7 @@ export default function GameInstance() {
     playerInputs.includes(b) &&
     playerInputs.includes(c)
    ) {
+    winningCombination = [a, b, c];
     return "wins";
    }
   }
@@ -99,5 +107,6 @@ export default function GameInstance() {
   getGameState,
   resetGameBoard,
   scoreBoard,
+  getWinningCombination,
  };
 }
