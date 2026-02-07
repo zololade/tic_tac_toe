@@ -74,7 +74,7 @@ export function gameStart() {
 
  type Player = "x" | "o";
  let currentPlayer: Player = "x";
- let cell = document.querySelectorAll(".cell");
+ let cells = document.querySelectorAll(".cell");
  let turn = document.querySelector(".turnCharacter");
  let resetButton = document.querySelector(".retry");
  if (turn) turn.innerHTML = ICON_X;
@@ -82,7 +82,7 @@ export function gameStart() {
  turnParent.classList.add("x-color");
  const scoreBoard = Array.from(document.querySelectorAll(".scoreBoard>*"));
 
- cell.forEach((currentCell) => {
+ cells.forEach((currentCell) => {
   currentCell?.addEventListener("click", (e) => {
    //grabinput
    const target = (e.target as HTMLDivElement).closest(".cell") as HTMLElement;
@@ -90,7 +90,8 @@ export function gameStart() {
    let cellId = target.dataset.cellNumber;
 
    // validate
-   if (cellId && !game.canPlay(+cellId)) return;
+   if (!cellId) return;
+   if (!game.canPlay(+cellId)) return;
    if (game.getGameState() !== "continue") return;
    // send input
    if (cellId) game.recPlayerPos(currentPlayer, +cellId);
@@ -115,7 +116,7 @@ export function gameStart() {
   // resetBoard
   game.resetGameBoard();
   //update ui
-  resetBoardUI(cell);
+  resetBoardUI(cells);
   // reset turn color and icon
   resetTurnUI(turn, turnParent);
   //reset player
