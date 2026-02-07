@@ -38,6 +38,7 @@ function renderDialog(
  player: "x" | "o",
  dialog: HTMLDialogElement,
 ) {
+ if (dialog.open) return;
  if (!winner) return;
  winner.classList.add(`${player === "x" ? "x" : "o"}-color`);
  winner.innerHTML = player === "x" ? ICON_X : ICON_O;
@@ -96,7 +97,7 @@ export function gameStart() {
  let currentPlayer: Player = "x";
  let cells = document.querySelectorAll(".cell");
  let turn = document.querySelector(".turnCharacter");
- let winnerLogo = document.querySelector(".winnerCharacter");
+ let winnerIcon = document.querySelector(".winnerCharacter");
  let resetButton = document.querySelector(".retry");
  if (turn) turn.innerHTML = ICON_X;
  let turnParent = turn?.parentNode as HTMLElement;
@@ -131,7 +132,7 @@ export function gameStart() {
    if (game.getGameState() === "wins") {
     let positions = game.getWinningCombination();
     renderWinningCells(positions, currentPlayer);
-    renderDialog(winnerLogo, currentPlayer, dialog);
+    renderDialog(winnerIcon, currentPlayer, dialog);
    }
    //update player
    currentPlayer = currentPlayer === "x" ? "o" : "x";
@@ -140,7 +141,7 @@ export function gameStart() {
 
  //handle rese and continue
  function resetLogic() {
-  clearDialog(winnerLogo, dialog);
+  clearDialog(winnerIcon, dialog);
   //updateScoreBoard
   updateScoreBoard(scoreBoard, game.scoreBoard);
   // resetBoard
