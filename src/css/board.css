@@ -14,3 +14,13 @@
  width: 5rem;
  place-items: center;
 }
+
+.winningCell {
+ color: #1f3540;
+}
+.XwinningCell {
+ background-color: #32c3c0;
+}
+.OwinningCell {
+ background-color: #f1b135;
+}

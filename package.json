@@ -6,8 +6,7 @@
  "scripts": {
   "dev": "vite",
   "build": "tsc && vite build",
-  "preview": "vite preview",
-  "debug": "tsx ./src/ts/Game.ts"
+  "preview": "vite preview"
  },
  "devDependencies": {
   "typescript": "~5.9.3",

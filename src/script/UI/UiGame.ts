@@ -39,7 +39,18 @@ export function gameStart() {
 
     // alert win
     if (game.getGameState() === "wins") {
-     alert("we have a winner");
+     let [a, b, c] = game.getWinningCombination();
+     document
+      .querySelectorAll(
+       `[data-cell-number="${a}"],[data-cell-number="${b}"],[data-cell-number="${c}"]`,
+      )
+      .forEach((cell) => {
+       cell.classList.remove("x-color", "o-color");
+       cell.classList.add(
+        `winningCell`,
+        `${playerId === "x" ? "X" : "O"}winningCell`,
+       );
+      });
     }
 
     playerId = playerId === "x" ? "o" : "x";
@@ -64,7 +75,13 @@ export function gameStart() {
 
   //update ui
   cell.forEach((currentCell) => {
-   currentCell.classList.remove("o-color", "x-color");
+   currentCell.classList.remove(
+    "o-color",
+    "x-color",
+    "winningCell",
+    "OwinningCell",
+    "XwinningCell",
+   );
    currentCell.innerHTML = "";
   });
 
